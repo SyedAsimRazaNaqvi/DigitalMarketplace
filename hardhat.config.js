@@ -1,24 +1,9 @@
 require("@nomiclabs/hardhat-waffle");
 const fs = require("fs");
 
-const privateKey = fs.readFileSync(".secret").toString().trim() || "01234567890123456789";
+ const privateKey = "c785117a1da4787f34a10b4ae32aa565d25d474fe342e9636d8eeb155be5b08b";
+const infuraId = "d968eabf0c2f44d2a7d2a1416dd78b23";
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
-
-  for (const account of accounts) {
-    console.log(account.address);
-  }
-});
-
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
-
-/**
- * @type import('hardhat/config').HardhatUserConfig
- */
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {
@@ -27,7 +12,8 @@ module.exports = {
     },
     mumbai: {
       url: "https://rpc-mumbai.matic.today",
-      accounts: [privateKey]
+      // url: `https://polygon-mumbai.infura.io/v3/${infuraId}`,
+      accounts: [privateKey],
     }
   },
   solidity: {
