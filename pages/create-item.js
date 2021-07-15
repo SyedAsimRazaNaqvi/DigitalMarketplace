@@ -5,8 +5,9 @@ import Web3Modal from 'web3modal'
 
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
-import { NFTMarketAddress, NFTAddress } from '../config';
+import { nftmarketaddress, nftaddress } from '../config';
 import { useRouter } from "next/router";
+import Web3 from "web3";
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
@@ -36,23 +37,25 @@ const CreatedItems = () => {
         const connection = await web3Modal.connect()
         const provider = new ethers.providers.Web3Provider(connection)    
         const signer = provider.getSigner()
-        
-        /* next, create the item */
-        let contract = new ethers.Contract(NFTAddress, NFT.abi, signer)
+
+        let contract = new ethers.Contract(nftaddress, NFT.abi, signer)
+
         let transaction = await contract.createToken(url)
+
         let tx = await transaction.wait()
+
         let event = tx.events[0]
         let value = event.args[2]
         let tokenId = value.toNumber()
     
         const price = ethers.utils.parseUnits(formInput.price, 'ether')
-      
-        /* then list the item for sale on the marketplace */
-        contract = new ethers.Contract(NFTMarketAddress, Market.abi, signer)
-        let listingPrice = await contract.getListingPrice()
+
+       let contractMarket = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+
+        let listingPrice = await contractMarket.getListingPrice()
         listingPrice = listingPrice.toString()
     
-        transaction = await contract.createMarketItem(NFTAddress, tokenId, price, { value: listingPrice })
+        transaction = await contractMarket.createMarketItem( nftaddress, tokenId, price , {value:listingPrice} )
         await transaction.wait()
         router.push('/')
     }
@@ -65,9 +68,10 @@ const CreatedItems = () => {
         })
         try {
             const added = await client.add(data);
-            const url = `https://ipfs.infura.io/ipfs/${added.path}  `
+            const url = `https://ipfs.infura.io/ipfs/${added.path}`
 
             createSale(url);
+
         } catch (error) {
             console.log("Error Uploading File", error);
         }

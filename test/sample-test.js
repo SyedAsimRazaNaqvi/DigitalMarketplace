@@ -34,7 +34,7 @@ describe("NFTMarket", function () {
     const [_, buyerAddress] = await ethers.getSigners();
     await market.connect(buyerAddress).createMarketSale(nftContractAddress, 2, { value: auctionPrice })
 
-    items = await market.fetchMarketItem();
+    items = await market.fetchMarketItems();
     items = await Promise.all(items.map(async i => {
       const tokenUri = await nft.tokenURI(i.tokenId);
       // console.log(i);
