@@ -88,7 +88,7 @@ const CreatedItems = () => {
                     <img src={fileUrl} className="rounded mt-4" width="350" />
                 )}
 
-                < button onClick={createMarket} className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg" >Create Digital Asset</ button>
+                < button onClick={createMarket} className="font-bold mt-4 bg-blue-500 text-white rounded p-4 shadow-lg" >Create Digital Asset</ button>
 
             </div>
         </div>
